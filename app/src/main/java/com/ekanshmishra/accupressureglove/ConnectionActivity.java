@@ -48,25 +48,17 @@ public class ConnectionActivity extends AppCompatActivity {
 
     final int handlerState = 0;
 
-    @Click(R.id.button_send)
-    protected void buttonSendClicked() {
-        if (!sendMessageEditText.getText().toString().trim().equals("".trim())) {
-            if (bluetoothSocket!=null) {
-                connectedThread.write(sendMessageEditText.getText().toString());
-            }
-        } else {
-            Toast.makeText(context, "Enter some text to Send", Toast.LENGTH_LONG).show();
-        }
+    @Click(R.id.button_stop)
+    protected void buttonStopClicked() {
+        sendBluetoothMessage("t");
     }
 
     @AfterViews
     protected void afterViews() {
 
-        Intent newint = getIntent();
-        address = newint.getStringExtra(FirstPage.EXTRA_ADDRESS);
+        initializeBluetoothConnection();
 
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
-        checkBTState();
+        sendBluetoothMessage(getIntent().getStringExtra("message"));
 
     }
 
@@ -154,6 +146,49 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+//
+//        //Get MAC address from DeviceListActivity via intent
+//        Intent intent = getIntent();
+//
+//        //Get the MAC address from the DeviceListActivty via EXTRA
+//        address = intent.getStringExtra(FirstPage.EXTRA_ADDRESS);
+//
+//        //create device and set the MAC address
+//        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+//
+//        try {
+//            bluetoothSocket = createBluetoothSocket(device);
+//        } catch (IOException e) {
+//            Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_LONG).show();
+//        }
+//        // Establish the Bluetooth socket connection.
+//        try
+//        {
+//            bluetoothSocket.connect();
+//        } catch (IOException e) {
+//            try
+//            {
+//                bluetoothSocket.close();
+//            } catch (IOException e2)
+//            {
+//                //insert code to deal with this
+//            }
+//        }
+//        connectedThread = new ConnectedThread(bluetoothSocket);
+//        connectedThread.start();
+
+        //I send a character when resuming.beginning transmission to check device is connected
+        //If it is not an exception will be thrown in the write method and finish() will be called
+//        connectedThread.write("z");
+    }
+
+    private void initializeBluetoothConnection() {
+
+        Intent newint = getIntent();
+        address = newint.getStringExtra(FirstPage.EXTRA_ADDRESS);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
+        checkBTState();
 
         //Get MAC address from DeviceListActivity via intent
         Intent intent = getIntent();
@@ -184,9 +219,13 @@ public class ConnectionActivity extends AppCompatActivity {
         }
         connectedThread = new ConnectedThread(bluetoothSocket);
         connectedThread.start();
+    }
 
+    private void sendBluetoothMessage(String message) {
         //I send a character when resuming.beginning transmission to check device is connected
         //If it is not an exception will be thrown in the write method and finish() will be called
-//        connectedThread.write("z");
+        if (bluetoothSocket != null) {
+            connectedThread.write(message);
+        }
     }
 }

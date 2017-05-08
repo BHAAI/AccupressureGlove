@@ -36,25 +36,12 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/image_hand"/>
 
-            <EditText
-                android:id="@+id/edit_text_send_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter data here to send via bluetooth"/>
-
             <Button
-                android:id="@+id/button_send"
+                android:id="@+id/button_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Send"/>
-
-            <TextView
-                android:id="@+id/textView_received_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Text Received will be displayed here."/>
+                android:text="Stop"/>
 
         </LinearLayout>
 
